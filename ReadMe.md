@@ -1,124 +1,149 @@
-# 🎮 Pierre–Feuille–Ciseaux en Python
+## 🎮 Pierre–Feuille–Ciseaux en Python
 
-Un jeu terminal interactif où tu affrontes l’ordinateur avec :
-- Animation des mains 🎬  
-- Affichage ASCII des mains ✋🤚  
-- Score graphique et historique des manches 📊  
-- Possibilité de rejouer plusieurs manches 🔄  
-
----
+Un jeu terminal interactif où le joueur affronte l’ordinateur avec :
+🎬 Animation des mains (elles bougent avant de révéler le choix)
+✋🤚 Affichage ASCII des mains face à face
+📊 Score graphique et historique des manches
+🔄 Possibilité de rejouer plusieurs manches
+❌ Gestion des entrées invalides (l’utilisateur doit bien écrire pierre, feuille ou ciseaux)
 
 ## ⚡ Fonctionnalités
-- Choix du joueur : **Pierre, Feuille, Ciseaux**  
-- Choix aléatoire de l’ordinateur  
-- Animation “Pierre… Feuille… Ciseaux !!!” avec les deux mains qui bougent  
-- Affichage face à face des mains réelles  
-- Historique des manches et score mis à jour  
-- Gestion des **entrées invalides**  
-
----
+Choix du joueur : Pierre, Feuille ou Ciseaux
+Choix de l’ordinateur généré aléatoirement
+Animation “Pierre… Feuille… Ciseaux !!!” avant l’affichage final
+Résultat en ASCII avec les mains affichées côte à côte
+Historique de toutes les manches jouées
+Score mis à jour sous forme de barres #
+Possibilité de rejouer tant que le joueur le souhaite
 
 ## 🛠️ Installation
-1. Cloner le dépôt :  
-```bash
+Cloner le dépôt
 git clone <URL_DU_DEPOT>
 cd nom_du_projet
-
-Créer et activer l’environnement virtuel :
+Créer un environnement virtuel
 python -m venv .venv
 
+
+Activer l’environnement
 # Windows
 .\.venv\Scripts\Activate   
+
 # Linux/Mac
 source .venv/bin/activate
-
-Installer la dépendance :
+Installer la dépendance
 pip install colorama
 
-Lancer le jeu :
+Lancer le jeu
 python main.py
 
-
-## 📄 Explication rapide du code
-arts_gauche et arts_droite → dessins ASCII des mains
-frames_sync → animation des mains avant le choix final
-choix_ordinateur() → choix aléatoire de l’ordinateur
-verifier_gagnant() → détermine le gagnant de la manche
-demander_choix() → demande et valide le choix du joueur
-animation_mains() → anime les deux mains en mouvement
-afficher_face_a_face() → montre le résultat final face à fac
-afficher_barres() → score visuel avec des #
-jouer_manche() → joue une manche complète
-main() → boucle principale, gère le score, l’historique et le rejouer
-
-1. Import des modules
+## 📄 Explication complète du code
+1. Imports et initialisation
 import random
 import time
 from colorama import init, Fore
+random → génère le choix aléatoire de l’ordinateur
+time → permet de mettre des pauses (sleep) pour créer des animations
+colorama → ajoute des couleurs dans le terminal (Fore.RED, Fore.GREEN, etc.)
+init(autoreset=True) → évite de devoir remettre les couleurs par défaut après chaque print
 
-random → pour choisir aléatoirement la main de l’ordinateur.
-time → pour gérer les pauses et les animations.
-colorama → pour ajouter des couleurs dans le terminal.
+2. ASCII ARTS des mains
+arts_gauche = {...}   # Mains côté joueur
+arts_droite = {...}   # Mains côté ordinateur (inversées)
+arts_gauche → dessins ASCII représentant pierre, feuille, ciseaux pour le joueur (main gauche).
+arts_droite → versions inversées (miroir) pour que les deux mains soient face à face.
+Sans cette inversion, les deux mains pointeraient dans la même direction.
 
-init(autoreset=True) → réinitialise automatiquement les couleurs après chaque print.
-
-2. ASCII ARTS
-arts_gauche = {...}
-arts_droite = {...}
-
-
-Contient les dessins ASCII des mains pour le joueur et l’ordinateur.
-arts_droite est redessiné pour faire face à face sans déformer les mains.
-
-3. Frames pour animation
-frames_sync = [("pierre","pierre"),("feuille","feuille"),("ciseaux","ciseaux")]
-Permet de créer une animation des mains qui bougent avant de révéler le vrai choix.
+3. Frames pour l’animation
+frames_sync = [
+    ("pierre", "pierre"),
+    ("feuille", "feuille"),
+    ("ciseaux", "ciseaux")
+]
+Définit les étapes d’animation avant le vrai choix.
+Permet de “faire bouger” les deux mains de façon synchronisée.
+Cela imite le geste qu’on fait en vrai quand on dit : “Pierre, feuille, ciseaux !”
 
 4. Fonctions principales
-choix_ordinateur()
-Retourne un choix aléatoire parmi ["pierre","feuille","ciseaux"].
-verifier_gagnant(joueur, ordinateur)
-Compare les choix et retourne : "joueur", "ordinateur" ou "egalite".
-demander_choix()
-Demande au joueur de saisir son choix.
-Gère les entrées invalides avec une boucle while True.
-animation_mains()
-Anime les deux mains qui bougent face à face.
-Utilise time.sleep() pour créer l’effet animé.
-Efface l’écran avec print("\033[H\033[J") pour donner l’impression de mouvement.
-afficher_face_a_face(joueur, ordinateur)
-Affiche les mains réelles après l’animation, avec les titres “VOUS” et “ORDINATEUR”.
-afficher_barres(score_joueur, score_ordi)
-Affiche une représentation graphique du score avec des #.
-Permet de visualiser rapidement qui mène la partie.
-jouer_manche()
+a) Choix de l’ordinateur
+def choix_ordinateur():
+    return random.choice(["pierre", "feuille", "ciseaux"])
+Retourne un choix aléatoire dans la liste.
 
-Gère une manche complète :
+b) Vérification du gagnant
+def verifier_gagnant(joueur, ordinateur):
+    ...
+Compare les choix du joueur et de l’ordinateur.
+Retourne "joueur", "ordinateur" ou "egalite".
+
+Exemple :
+Pierre bat Ciseaux
+Feuille bat Pierre
+Ciseaux bat Feuille
+
+c) Demande du choix du joueur
+def demander_choix():
+    ...
+Demande à l’utilisateur d’écrire son choix.
+Boucle while True : tant que l’entrée est invalide → redemande.
+Évite les erreurs si l’utilisateur tape autre chose.
+
+d) Animation des mains
+def animation_mains():
+    ...
+Affiche les deux mains face à face avec un effet de mouvement.
+Utilise :
+time.sleep(0.3) → pause entre chaque image
+print("\033[H\033[J") → efface l’écran (donne l’impression que les mains bougent)
+
+Termine par le message :
+Pierre... Feuille... Ciseaux !!!
+
+e) Affichage face à face final
+def afficher_face_a_face(joueur, ordinateur):
+    ...
+
+Affiche les vrais choix du joueur et de l’ordinateur en ASCII.
+Écrit en dessous des mains quel signe a été choisi (pierre, feuille ou ciseaux).
+
+f) Affichage du score
+def afficher_barres(score_joueur, score_ordi):
+    ...
+Transforme le score en une barre graphique avec des #.
+
+Exemple :
+Vous      : ### (3)
+Ordinateur: ##  (2)
+
+g) Une manche complète
+def jouer_manche():
+    ...
+
+Étapes :
 Demande le choix du joueur
-Choix aléatoire de l’ordinateur
+Génère le choix de l’ordinateur
 Lance l’animation
 Affiche les mains réelles
-Détermine le gagnant et retourne le résultat
+Détermine et affiche le gagnant
 
 5. Boucle principale main()
-Gère le score total, le nombre de manches, et l’historique.
-Affiche le score après chaque manche.
-Demande au joueur s’il veut rejouer ou terminer la partie.
+def main():
+    ...
+Initialise : score joueur, score ordinateur, numéro de manche, historique.
 
-À la fin, affiche :
-Le résultat final
-L’historique des manches
-Le gagnant global
+À chaque manche :
+Joue une partie avec jouer_manche()
+Met à jour les scores et l’historique
+Affiche le score avec des barres #
+Demande si le joueur veut rejouer.
 
-Choix techniques
-Colorama → pour rendre le jeu plus lisible et attractif.
-ASCII art → pour avoir une interface visuelle simple dans le terminal.
-Animation → rend le jeu interactif et amusant.
-Historique + barres de score → suivi clair de la progression.
-Vérification des entrées → empêche les erreurs et rend le jeu robuste.
-Améliorations possibles
-Ajouter un mode Best of 3/5/7 manches.
-Ajouter un compteur de victoires consécutives.
-Ajouter un son ou effet sonore à chaque manche.
-Créer une interface graphique avec tkinter ou pygame.
-Ajouter des animations plus complexes pour les mains.
+## 👉 Si le joueur dit non :
+Affiche le résultat final
+Montre l’historique des manches
+Déclare le gagnant global 🎉
+
+## 🎯 Choix techniques
+Colorama → couleurs claires pour rendre le jeu plus lisible et amusant.
+ASCII art → interface visuelle simple dans un terminal texte.
+Animation avec time.sleep + effacement de l’écran → rend le jeu vivant.
+Historique + barres de score → suivi clair et visuel de la progression.
+Validation des entrées → empêche les bugs liés aux fautes de frappe.
