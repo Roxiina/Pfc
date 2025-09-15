@@ -1,11 +1,11 @@
 ## 🎮 Pierre–Feuille–Ciseaux en Python
 
 Un jeu terminal interactif où le joueur affronte l’ordinateur avec :
-🎬 Animation des mains (elles bougent avant de révéler le choix)
-✋🤚 Affichage ASCII des mains face à face
-📊 Score graphique et historique des manches
-🔄 Possibilité de rejouer plusieurs manches
-❌ Gestion des entrées invalides (l’utilisateur doit bien écrire pierre, feuille ou ciseaux)
+- 🎬 Animation des mains (elles bougent avant de révéler le choix)
+- ✋🤚 Affichage ASCII des mains face à face
+- 📊 Score graphique et historique des manches
+- 🔄 Possibilité de rejouer plusieurs manches
+- ❌ Gestion des entrées invalides (l’utilisateur doit bien écrire pierre, feuille ou ciseaux)
 
 ## ⚡ Fonctionnalités
 Choix du joueur : Pierre, Feuille ou Ciseaux
