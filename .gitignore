@@ -1,0 +1,13 @@
+# Environnement virtuel
+.venv/
+
+# Fichiers Python temporaires
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Dossiers de build et distribution
+build/
+dist/
+*.egg-info
