@@ -39,7 +39,7 @@ arts_gauche = {
 # ASCII art pour l’ordinateur (à droite, miroir des gauches pour qu’elles soient face à face)
 arts_droite = {
     "pierre": """
-       _______
+   _______
   (____   '---
  (_____)
  (_____)
@@ -47,7 +47,7 @@ arts_droite = {
    (___)__.---
 """,
     "feuille": """
-       _______
+   _______
   (____    '---
  (______
 (_______
@@ -55,7 +55,7 @@ arts_droite = {
    (__________.---
 """,
     "ciseaux": """
-       _______
+   _______
   (____   '---
  (______
 (__________
