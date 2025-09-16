@@ -1,14 +1,14 @@
-import random
-import time
-from colorama import init, Fore
+import random   # Sert à choisir au hasard le coup de l’ordinateur (pierre, feuille ou ciseaux)
+import time     # Sert à gérer le temps (pause, animation) → utilisé avec time.sleep()
+from colorama import init, Fore  # Colorama permet d’afficher du texte en couleur dans le terminal
 
-# Initialisation de colorama pour les couleurs dans le terminal
-# (autoreset=True permet de revenir à la couleur par défaut après chaque print)
+# Initialisation de colorama
+# autoreset=True → remet la couleur par défaut après chaque print
 init(autoreset=True)
 
 # ===================== ASCII ARTS =====================
 
-# Mains du joueur (côté gauche, normales)
+# ASCII art pour le joueur (à gauche)
 arts_gauche = {
     "pierre": """
     _______
@@ -36,7 +36,7 @@ arts_gauche = {
 """
 }
 
-# Mains de l’ordinateur (côté droit, miroir des gauches pour faire "face à face")
+# ASCII art pour l’ordinateur (à droite, miroir des gauches pour qu’elles soient face à face)
 arts_droite = {
     "pierre": """
        _______
@@ -64,7 +64,7 @@ arts_droite = {
 """
 }
 
-# Frames pour l’animation des deux mains avant de révéler les vrais choix
+# Frames pour l’animation → permet de montrer les mains qui bougent avant de révéler le vrai choix
 frames_sync = [
     ("pierre", "pierre"),
     ("feuille", "feuille"),
@@ -75,7 +75,9 @@ frames_sync = [
 
 def choix_ordinateur():
     """Retourne un choix aléatoire pour l'ordinateur"""
+    # random.choice → choisit un élément au hasard dans la liste
     return random.choice(["pierre", "feuille", "ciseaux"])
+
 
 def verifier_gagnant(joueur, ordinateur):
     """Détermine le gagnant de la manche"""
@@ -88,83 +90,83 @@ def verifier_gagnant(joueur, ordinateur):
     else:
         return "ordinateur"
 
+
 def demander_choix():
     """Demande à l'utilisateur de choisir pierre, feuille ou ciseaux"""
-    while True:
+    while True:  # boucle infinie qui continue jusqu’à une entrée valide
         choix = input(Fore.CYAN + "Choisissez pierre, feuille ou ciseaux : ").lower()
         if choix in ["pierre", "feuille", "ciseaux"]:
             return choix
+        # Fore.RED → texte rouge
         print(Fore.RED + "Entrée invalide, veuillez réessayer.")
+
 
 def animation_mains():
     """
-    Anime les deux mains qui bougent face à face
-    (comme si elles se chauffaient avant de jouer).
+    Anime les deux mains qui bougent face à face avant le vrai choix.
     """
-    for _ in range(2):  # nombre de cycles d'animation
+    for _ in range(2):  
+        # for _ in range(2) → répète l’animation 2 fois
+        # Le "_" veut dire qu’on n’a pas besoin de la valeur, juste répéter
         for gauche, droite in frames_sync:
-            # On découpe les ASCII en lignes
-            lignes_gauche = arts_gauche[gauche].splitlines()
+            # zip(lignes_gauche, lignes_droite) → permet de parcourir les deux listes de lignes ASCII en parallèle
+            lignes_gauche = arts_gauche[gauche].splitlines()  # splitlines → transforme le dessin ASCII en liste ligne par ligne
             lignes_droite = arts_droite[droite].splitlines()
 
-            # Titre au-dessus des mains
             print(Fore.GREEN + "VOUS".ljust(45) + Fore.MAGENTA + "ORDINATEUR")
-            
-            # Affiche les deux mains côte à côte
+            # ljust(45) → aligne le texte à gauche sur 45 caractères (pour espacer les deux mains)
+
             for l_j, l_o in zip(lignes_gauche, lignes_droite):
+                # l_j = une ligne du dessin du joueur
+                # l_o = une ligne du dessin de l’ordi
                 print(Fore.YELLOW + l_j.ljust(45) + Fore.YELLOW + l_o)
 
-            time.sleep(0.3)              # petite pause pour donner l’effet animé
-            print("\033[H\033[J", end="")  # efface l'écran (ANSI escape code)
+            time.sleep(0.3)              # petite pause → crée l’effet animé
+            print("\033[H\033[J", end="")  # efface l’écran avec un code ANSI pour donner l’impression que ça bouge
 
     print(Fore.CYAN + "Pierre... Feuille... Ciseaux !!!\n")
     time.sleep(0.5)
 
+
 def afficher_face_a_face(joueur, ordinateur):
     """
-    Affiche les choix du joueur et de l’ordinateur sous forme ASCII,
-    avec leur nom écrit juste **en dessous** de la main.
+    Affiche les choix du joueur et de l’ordinateur en ASCII,
+    avec leur nom écrit en dessous.
     """
     lignes_joueur = arts_gauche[joueur].splitlines()
     lignes_ordi = arts_droite[ordinateur].splitlines()
 
-    # Titre
     print(Fore.GREEN + "VOUS".ljust(45) + Fore.MAGENTA + "ORDINATEUR")
 
-    # Affichage des mains ASCII
     for l_j, l_o in zip(lignes_joueur, lignes_ordi):
         print(Fore.YELLOW + l_j.ljust(45) + Fore.YELLOW + l_o)
 
-    # Affichage des noms **sous les mains**, une seule fois
+    # Ajoute le nom du signe sous la main
     print(Fore.CYAN + joueur.ljust(45) + Fore.MAGENTA + ordinateur)
+
 
 def afficher_barres(score_joueur, score_ordi):
     """Affiche un classement visuel avec des barres de # représentant les scores"""
+    # "#" * score_joueur → répète le caractère # autant de fois que le score
     joueur_barre = "#" * score_joueur
     ordi_barre = "#" * score_ordi
     print(Fore.GREEN + f"Vous      : {joueur_barre} ({score_joueur})")
     print(Fore.RED + f"Ordinateur: {ordi_barre} ({score_ordi})")
 
+
 def jouer_manche():
-    """
-    Joue une manche complète :
-    - demande le choix du joueur
-    - génère celui de l’ordinateur
-    - lance l’animation
-    - affiche les résultats
-    """
+    """Joue une manche complète"""
     joueur = demander_choix()
     ordinateur = choix_ordinateur()
 
     print(Fore.MAGENTA + "\nPréparez-vous...")
     time.sleep(1)
-    animation_mains()  # animation avant révélation
+    animation_mains()
 
     afficher_face_a_face(joueur, ordinateur)
 
     gagnant = verifier_gagnant(joueur, ordinateur)
 
-    # Messages selon le résultat
     if gagnant == "egalite":
         print(Fore.BLUE + "\nÉgalité !")
     elif gagnant == "joueur":
@@ -174,44 +176,41 @@ def jouer_manche():
 
     return gagnant, joueur, ordinateur
 
+
 # ===================== BOUCLE PRINCIPALE =====================
 
 def main():
     score_joueur = 0
     score_ordi = 0
     manche = 1
-    historique = []  # garde en mémoire toutes les manches jouées
+    historique = []  # garde la liste de toutes les manches jouées
 
-    while True:
+    while True:  # boucle principale du jeu
         print(Fore.CYAN + f"\n--- Manche {manche} ---")
         resultat, choix_joueur, choix_ordi = jouer_manche()
 
-        # Ajoute au suivi de l’historique
-        historique.append((choix_joueur, choix_ordi, resultat))
+        historique.append((choix_joueur, choix_ordi, resultat))  # garde en mémoire
 
-        # Mise à jour des scores
+        # Mise à jour du score
         if resultat == "joueur":
             score_joueur += 1
         elif resultat == "ordinateur":
             score_ordi += 1
 
-        # Affiche le score courant
         print(Fore.CYAN + f"\nScore après manche {manche} :")
         afficher_barres(score_joueur, score_ordi)
 
-        # Demande si le joueur veut continuer
+        # Demande si on continue ou si on arrête
         rejouer = input(Fore.CYAN + "Voulez-vous rejouer ? (oui/non) : ").lower()
         if rejouer != "oui":
             # Résumé final
             print(Fore.MAGENTA + "\n--- Résultat final ---")
             afficher_barres(score_joueur, score_ordi)
 
-            # Historique complet
             print(Fore.CYAN + "\nHistorique des manches :")
             for i, (j, o, r) in enumerate(historique, start=1):
                 print(f"Manche {i}: Vous ({j}) vs Ordi ({o}) → {r}")
 
-            # Résultat global
             if score_joueur > score_ordi:
                 print(Fore.GREEN + "\nBravo, vous avez gagné la partie ! 🎉")
             elif score_joueur < score_ordi:
@@ -219,9 +218,12 @@ def main():
             else:
                 print(Fore.BLUE + "\nÉgalité parfaite ! ⚖️")
             break
-        manche += 1
-        
 
-# Lancement du jeu
+        manche += 1
+
+
+# ===================== LANCEMENT DU JEU =====================
+# if __name__ == "__main__": permet de lancer main() uniquement
+# si le fichier est exécuté directement, pas si on l’importe.
 if __name__ == "__main__":
     main()
