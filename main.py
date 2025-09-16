@@ -73,6 +73,34 @@ frames_sync = [
 
 # ===================== FONCTIONS =====================
 
+def intro_jeu():
+    """Affiche une intro avec deux mains décoratives"""
+    main_gauche = """
+       /')    ./')             
+      /' /.--''./'')           
+ :--''  ;    ''./'')          
+ :     '     ''./')             
+ :           ''./'             
+ :--''-..--''''                   
+    """
+
+    main_droite = """
+       ('\\.    ('\\
+      (''\\.''--.\\ '\\
+     (''\\.''    ;  ''-- 
+      ('\\.''     '        :
+         '\\.''            :
+           ''''--..-''-- 
+    """
+
+    print(Fore.CYAN + "\n🎮 Pierre ? Feuille ? Ciseaux ? 🎮\n")
+    time.sleep(1)
+    
+    print(Fore.YELLOW + main_gauche)
+    print(Fore.YELLOW + main_droite)
+    time.sleep(2)
+
+
 def choix_ordinateur():
     """Retourne un choix aléatoire pour l'ordinateur"""
     # random.choice → choisit un élément au hasard dans la liste
@@ -152,6 +180,8 @@ def afficher_barres(score_joueur, score_ordi):
     ordi_barre = "#" * score_ordi
     print(Fore.GREEN + f"Vous      : {joueur_barre} ({score_joueur})")
     print(Fore.RED + f"Ordinateur: {ordi_barre} ({score_ordi})")
+    # f"..." → c’est une f-string en Python (format string). 
+    # Ça permet d’intégrer directement des variables dans une chaîne de caractères avec {}.
 
 
 def jouer_manche():
@@ -160,6 +190,7 @@ def jouer_manche():
     ordinateur = choix_ordinateur()
 
     print(Fore.MAGENTA + "\nPréparez-vous...")
+    # \n = saut de ligne (retour à la ligne avant le texte).
     time.sleep(1)
     animation_mains()
 
@@ -170,11 +201,14 @@ def jouer_manche():
     if gagnant == "egalite":
         print(Fore.BLUE + "\nÉgalité !")
     elif gagnant == "joueur":
+    # elif = contraction de else if → “sinon si”
         print(Fore.GREEN + "\nVous gagnez cette manche !")
     else:
+    # else en Python veut dire “dans tous les autres cas”
         print(Fore.RED + "\nL'ordinateur gagne cette manche !")
 
     return gagnant, joueur, ordinateur
+    # return sert à renvoyer une valeur
 
 
 # ===================== BOUCLE PRINCIPALE =====================
@@ -185,11 +219,16 @@ def main():
     manche = 1
     historique = []  # garde la liste de toutes les manches jouées
 
+    # Intro du jeu
+    intro_jeu()  # <-- Appelle la fonction pour montrer pierre vs feuille
+
     while True:  # boucle principale du jeu
+    # while est une boucle qui répète des instructions tant qu’une condition est vraie.
         print(Fore.CYAN + f"\n--- Manche {manche} ---")
         resultat, choix_joueur, choix_ordi = jouer_manche()
 
         historique.append((choix_joueur, choix_ordi, resultat))  # garde en mémoire
+        # append = C’est une méthode des listes en Python.
 
         # Mise à jour du score
         if resultat == "joueur":
